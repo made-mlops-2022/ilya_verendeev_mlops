@@ -21,7 +21,7 @@ def required():
 
 setup(
     name='Mlops-ml-deploy-made-iv',
-    version='0.7',
+    version='0.8',
     description='Mlops-ml-deploy-made-iv',
     long_description=readme(),
     url='https://github.com/Z5-05/mlops_made_2022/tree/hw01',
