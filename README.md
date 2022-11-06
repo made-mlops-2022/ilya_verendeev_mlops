@@ -7,8 +7,8 @@
 2) ```source .venv/bin/activate```
 3) ```pip3 install -r requirements.txt```
 
-### Make directory for logs and results:
-```mkdir src/logs && mkdir src/results```
+### Make directory for logs and results (if there aren't these folders in actual commit):
+```mkdir src/logs && mkdir results```
 ### ML pipeline start with commands:
 #### Training:
 ```python3 -m src.model_pipeline --process-type=train configs/<config's name>```
