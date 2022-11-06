@@ -27,7 +27,6 @@ jobs:
         python -m pip install flake8
         if [ -f requirements.txt ]; then pip install --ignore-installed -r requirements.txt; fi
         python -m pip install -e .
-        mkdir src/logs
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
