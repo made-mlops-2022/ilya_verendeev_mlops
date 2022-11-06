@@ -1,0 +1,79 @@
+dataset_params:
+  input_file_path: "data/raw/heart_cleveland_upload.csv"
+  output_paths:
+    - "data/processed/train.csv"
+    - "data/processed/val.csv"
+
+splitting_params:
+  val_size: 0.2
+  random_state: null
+
+preprocessing_params:
+  pipeline:
+    - "normalization"
+    - "polynomial"
+    - "k-bin"
+
+feature_params:
+  categorical_features:
+    - 'sex'
+    - 'restecg'
+    - 'slope'
+    - 'fbs'
+    - 'cp'
+    - 'exang'
+    - 'thal'
+    - 'ca'
+  numerical_features:
+    - 'age'
+    - 'oldpeak'
+    - 'trestbps'
+    - 'thalach'
+    - 'chol'
+  target_col: "condition"
+
+model_params:
+  model_save_path:
+    "models/random_forest_model.pkl"
+  model_name:
+    "RandomForestClassifier"
+  parameters:
+    # bootstrap
+    - true
+    # ccp_alpha
+    - 0
+    # class_weight
+    - "balanced"
+    # criterion
+    - "entropy"
+    # max_depth
+    - 3
+    # max_features
+    - "sqrt"
+    # max_leaf_nodes
+    - null
+    # max_samples
+    - null
+    # min_impurity_decrease
+    - 0
+    # min_samples_leaf
+    - 1
+    # min_samples_split
+    - 2
+    # min_weight_fraction_leaf
+    - 0
+    # n-estimators
+    - 100
+    # n_jobs
+    - null
+    # oob_score
+    - false
+    # random_state
+    - 42
+    # verbose
+    - 0.3
+    # warm_start
+    - false
+
+
+
