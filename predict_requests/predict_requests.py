@@ -22,7 +22,7 @@ def main():
         logger.debug("Generate request - %s", str(request))
         logger.info("Send request")
         response = requests.post(
-            "http://127.0.0.1:8000/predict",
+            "http://0.0.0.0:8000/predict",
             json.dumps(request)
         )
         logger.info("Request status code: %s", str(response.status_code))

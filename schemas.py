@@ -44,6 +44,6 @@ class DatasetClass(BaseModel):
 
     @validator('oldpeak')
     def oldpeak_validator(cls, value):
-        if value <= 0 or value > 10:
-            raise ValueError('Oldpeak must be between 1 and 10')
+        if value < 0 or value > 10:
+            raise ValueError('Oldpeak must be between 0 and 10')
         return value

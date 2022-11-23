@@ -4,21 +4,19 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from schemas import DatasetClass
 import pandas as pd
+import os
 from fastapi_health import health
 
 PIPELINE = Pipeline()
-
-transformer_path = "models/transformer.pkl"
-model_path = "models/random_forest_model.pkl"
 
 app = FastAPI(title="Random Forest Model",
               description="Rest API for homework № 2",
               version="1.0")
 
 @app.on_event("startup")
-def load_model():
-    PIPELINE.transformer = get_pipe_from_file(transformer_path)
-    PIPELINE.model = get_pipe_from_file(model_path)
+def get_transformer_and_model():
+    PIPELINE.transformer = get_pipe_from_file(os.getenv("PATH_TO_TRANSFORMER"))
+    PIPELINE.model = get_pipe_from_file(os.getenv("PATH_TO_MODEL"))
 
 @app.post("/predict")
 async def predict(data: DatasetClass):
