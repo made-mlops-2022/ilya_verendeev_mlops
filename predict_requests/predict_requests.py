@@ -1,24 +1,33 @@
+import json
+import logging
+from pathlib import Path
 import requests
+from utils import generate_dataset
 
+DATASET_SIZE = 20
 
-logger = logging.getLogger('requests')
-logger.setLevel(logging.INFO)
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+logging.basicConfig(
+    filename=Path(__file__).parents[1],
+    format="%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
+    datefmt="%Y-%m-%d:%H:%M:%S",
+    level=logging.DEBUG,
+    filemode="w",
+)
+logger = logging.getLogger(__name__)
 
 def main():
-    logger.info("Reading test data")
-    df = pd.read_csv('synthetic_data.csv').drop(columns=['condition'])
-    data = df.to_dict('records')
-    logger.info("Data successfully read")
+    logger.debug("Start predict_requests.py script")
 
-    for request in data:
-        logger.info('Sending request...')
+    for request in generate_dataset(DATASET_SIZE):
+        logger.debug("Generate request - %s", str(request))
+        logger.info("Send request")
         response = requests.post(
-            'http://127.0.0.1:8000/predict',
+            "http://127.0.0.1:8000/predict",
             json.dumps(request)
         )
-        logger.info(f'Status Code: {response.status_code}')
-        logger.info(f'Message: {response.json()}')
+        logger.info("Request status code: %s", str(response.status_code))
+        logger.debug("Request body: %s", str(response))
+    logger.debug("Finish predict_requests.py script")
+
+if __name__ == "__main__":
+    main()

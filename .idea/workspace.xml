@@ -9,11 +9,13 @@
       <change beforePath="$PROJECT_DIR$/.github/workflows/python-ci.yaml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.github/workflows/python-publish.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/configs/logistic_regression_config.yaml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/configs/random_forest_config.yaml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/models/logistic_regression_model.pkl" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/notebooks/EDA.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/predict_requests/predict_requests.py" beforeDir="false" afterPath="$PROJECT_DIR$/predict_requests/predict_requests.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/results/metrics.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" />
@@ -58,8 +60,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="Jupyter Notebook" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -102,7 +104,7 @@
       <workItem from="1669057054085" duration="3457000" />
       <workItem from="1669101853765" duration="10153000" />
       <workItem from="1669113090515" duration="14846000" />
-      <workItem from="1669186234118" duration="9805000" />
+      <workItem from="1669186234118" duration="10520000" />
     </task>
     <servers />
   </component>
