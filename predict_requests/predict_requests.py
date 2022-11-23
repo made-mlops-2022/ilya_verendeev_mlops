@@ -7,7 +7,7 @@ from utils import generate_dataset
 DATASET_SIZE = 20
 
 logging.basicConfig(
-    filename=Path(__file__).parents[1],
+    filename="logs.log",
     format="%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
     datefmt="%Y-%m-%d:%H:%M:%S",
     level=logging.DEBUG,
