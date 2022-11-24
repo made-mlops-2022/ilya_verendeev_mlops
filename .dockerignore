@@ -1,0 +1,6 @@
+.gitignore
+.github/
+README.md
+test_app.py
+run_tests.sh
+logs.log

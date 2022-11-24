@@ -1,32 +1,35 @@
-# mlops_made_2022
-
-
-### Настройка окружение:
-
-1) ```python3 -m venv .venv```
-2) ```source .venv/bin/activate```
-3) ```pip3 install -r requirements.txt```
-
-### Make directory for logs and results (if there aren't these folders in actual commit):
-```mkdir src/logs && mkdir results```
-### ML pipeline start with commands:
-#### Training:
-```python3 -m src.model_pipeline --process-type=train configs/<config's name>```
-#### Evaluating:
-```python3 -m src.model_pipeline --process-type=predict configs/<config's name>```
-### Configs:
-1) ```logistic_regression_config.yaml``` - model with logistic regression
-2) ```random_forest_config.yaml``` - model with random forest
-#### Preprocessing pipeline can be corrected with changing ```preprocessing_params```. There are three different type of preprocessing in configs: ```normalization```, ```polynomial```, ```k-bin```
+## Homework №2
+### Docker:
+To build docker image with API:
+```
+docker build -t ilyaverendeev/homework_mlops:v1 .
+```
+To pull it from [DockerHub](https://hub.docker.com/r/ilyaverendeev/homework_mlops):
+```
+docker pull ilyaverendeev/homework_mlops:v1
+```
+To run container with API:
+```
+docker run --name homework_mlops -p 8000:8000 ilyaverendeev/homework_mlops:v1
+```
+### Fast API:
+All information about endpoints and data-validators in API is shows in ```http://0.0.0.0:8000/docs``` <br />
+Bash-script ```run.sh``` starts in docker.
+To test custom requests use script ```predict_requests.py``` from parent system:
+```
+python3 -m predict_requests.predict_requests
+```
+**P.S.** 
+This script generate data using generator ```utils.generate_dataset``` <br />
+**P.P.S.**
+Before using ```predict_requests.predict_requests``` start container
 ### Tests:
-Tests start with ```python3 -m unittest discover -s ./tests  -p 'test_*.py'```
-### Output data:
-1) ```results/metrics.json``` - result of predict-process
-2) ```src/logs/logs.log``` - logs of all scripts
-
-### Other:
-requirements.txt was created with console command:
-```pip3 freeze | grep -v hw01 > requirements.txt``` - all libs were saved like this
-.gitignore and global .gitignore was created with console command:
-1) ```curl -o .gitignore https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore``` - and add -idea
-2) ```curl -o $HOME/.gitignore_global https://raw.githubusercontent.com/github/gitignore/master/Global/Linux.gitignore```
+To run test from parent system:
+```
+bash run_tests.sh
+```
+### Docker optimization:
+1. Add .dockerignore
+2. Many run-operations in one
+3. Try to use ```docker build``` from stdin, but it hasn't got some results
+4. Drop from requirements.txt packages, which are used only in ```predict_requests.predict_requests``` and ```test_app```
