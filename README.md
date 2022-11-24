@@ -20,7 +20,7 @@ To test custom requests use script ```predict_requests.py``` from parent system:
 python3 -m predict_requests.predict_requests
 ```
 **P.S.** 
-This script generate data using generator ```utils.generate_dataset```
+This script generate data using generator ```utils.generate_dataset``` <br />
 **P.P.S.**
 Before using ```predict_requests.predict_requests``` start container
 ### Tests:
