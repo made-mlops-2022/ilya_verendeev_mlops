@@ -1,0 +1,66 @@
+import os.path
+
+from airflow import DAG
+from airflow.providers.docker.operators.docker import DockerOperator
+from airflow.sensors.python import PythonSensor
+from airflow.utils.dates import days_ago
+from docker.types import Mount
+
+default_args = {
+    "owner": "ilaverendeev",
+    "email": ["ilaverendeev@gmail.com"],
+    "retries": 0,
+    'depends_on_past': False,
+}
+
+def check_files(*args):
+    flag = True
+    for file in args:
+        flag = flag & os.path.exists(file)
+    return flag
+
+with DAG(
+    "predict",
+    default_args=default_args,
+    catchup=False,
+    schedule_interval="0 8 * * *",
+    start_date=days_ago(0, 2),
+) as dag:
+    wait_loading_data = PythonSensor(
+        task_id='wait-for-data-loading',
+        python_callable=check_files,
+        op_args=['/opt/airflow/data/raw/{{ ds }}/data.csv',
+                 '/opt/airflow/data/raw/{{ ds }}/target.csv'],
+        timeout=6000,
+        poke_interval=10,
+        retries=100,
+        mode="poke"
+    )
+    preprocessing = DockerOperator(
+        image='airflow-preprocessing',
+        command='--input-dir /data/raw/{{ ds }} --output-dir /data/predict/processed/{{ ds }}',
+        network_mode='bridge',
+        task_id='preprocessing',
+        do_xcom_push=False,
+        auto_remove=True,
+        mounts=[Mount(source="/home/ilya/MADE/mlops_made_2022/hw03/ilya_verendeev_mlops", target='/data', type='bind')]
+    )
+    split = DockerOperator(
+        image='airflow-split',
+        command='--input-dir /data/predict/processed/{{ ds }} --output-dir /data/predict/splitted/{{ ds }}',
+        network_mode='bridge',
+        task_id='split',
+        do_xcom_push=False,
+        auto_remove=True,
+        mounts=[Mount(source="/home/ilya/MADE/mlops_made_2022/hw03/ilya_verendeev_mlops", target='/data', type='bind')]
+    )
+    predict = DockerOperator(
+        image='airflow-test',
+        command='--input-dir /data/predict/splitted/{{ ds }} --models-dir /data/models/{{ ds }} --output-dir /data/predict/results/{{ ds }}',
+        network_mode='bridge',
+        task_id='validate',
+        do_xcom_push=False,
+        auto_remove=True,
+        mounts=[Mount(source="/home/ilya/MADE/mlops_made_2022/hw03/ilya_verendeev_mlops", target='/data', type='bind')]
+    )
+    wait_loading_data >> preprocessing >> split >> predict
