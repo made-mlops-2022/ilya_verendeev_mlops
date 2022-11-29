@@ -10,9 +10,9 @@ from sklearn.metrics import accuracy_score, f1_score
 
 
 @click.command('test')
-@click.argument("input_dir")
-@click.argument("models_dir")
-@click.argument("output_dir")
+@click.option("--input-dir")
+@click.option("--models-dir")
+@click.option("--output-dir")
 def main(input_dir: str, models_dir: str, output_dir: str)->None:
 
     os.makedirs(output_dir, exist_ok=True)

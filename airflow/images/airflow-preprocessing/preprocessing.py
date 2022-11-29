@@ -10,8 +10,8 @@ from sklearn.preprocessing import StandardScaler
 
 
 @click.command('preprocessing')
-@click.argument("input_dir")
-@click.argument("output_dir")
+@click.option("--input-dir")
+@click.option("--output-dir")
 def main(input_dir: str, output_dir: str)->None:
     os.makedirs(output_dir, exist_ok=True)
     data_df = pd.read_csv(os.path.join(input_dir, "data.csv"))

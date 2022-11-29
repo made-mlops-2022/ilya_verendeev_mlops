@@ -1,3 +1,4 @@
+import datetime as dt
 import os.path
 
 from airflow import DAG
@@ -24,7 +25,7 @@ with DAG(
     default_args=default_args,
     catchup=False,
     schedule_interval="0 8 * * *",
-    start_date=days_ago(0, 2),
+    start_date=dt.datetime(2022, 11, 25),
 ) as dag:
     wait_loading_data = PythonSensor(
         task_id='wait-for-data-loading',
@@ -43,7 +44,7 @@ with DAG(
         task_id='preprocessing',
         do_xcom_push=False,
         auto_remove=True,
-        mounts=[Mount(source="/home/ilya/MADE/mlops_made_2022/hw03/ilya_verendeev_mlops", target='/data', type='bind')]
+        mounts=[Mount(source="/home/ilya/MADE/mlops_hw_03/ilya_verendeev_mlops/airflow/data", target='/data', type='bind')]
     )
     split = DockerOperator(
         image='airflow-split',
@@ -52,7 +53,7 @@ with DAG(
         task_id='split',
         do_xcom_push=False,
         auto_remove=True,
-        mounts=[Mount(source="/home/ilya/MADE/mlops_made_2022/hw03/ilya_verendeev_mlops", target='/data', type='bind')]
+        mounts=[Mount(source="/home/ilya/MADE/mlops_hw_03/ilya_verendeev_mlops/airflow/data", target='/data', type='bind')]
     )
     predict = DockerOperator(
         image='airflow-test',
@@ -61,6 +62,6 @@ with DAG(
         task_id='validate',
         do_xcom_push=False,
         auto_remove=True,
-        mounts=[Mount(source="/home/ilya/MADE/mlops_made_2022/hw03/ilya_verendeev_mlops", target='/data', type='bind')]
+        mounts=[Mount(source="/home/ilya/MADE/mlops_hw_03/ilya_verendeev_mlops/airflow/data", target='/data', type='bind')]
     )
     wait_loading_data >> preprocessing >> split >> predict

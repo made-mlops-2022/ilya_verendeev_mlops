@@ -7,8 +7,8 @@ from sklearn.model_selection import train_test_split
 
 
 @click.command('split')
-@click.argument("input_dir")
-@click.argument("output_dir")
+@click.option("--input-dir")
+@click.option("--output-dir")
 def main(input_dir: str, output_dir: str):
     os.makedirs(output_dir, exist_ok=True)
     processed_data_df = pd.read_csv(os.path.join(input_dir, "processed.csv"))

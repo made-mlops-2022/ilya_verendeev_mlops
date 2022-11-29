@@ -16,18 +16,23 @@ x-airflow-image: &airflow_image apache/airflow:2.3.0-python3.8
 services:
   postgres:
     image: postgres:12-alpine
+    volumes:
+      - ./pg-init-scripts:/docker-entrypoint-initdb.d
+    container_name: postgres
     environment:
       - POSTGRES_USER=airflow
       - POSTGRES_PASSWORD=airflow
-      - POSTGRES_DB=airflow
+      - POSTGRES_MULTIPLE_DATABASES=airflow, db_mlflow
     ports:
       - "5432:5432"
+
   init:
     build:
       context: images/airflow-docker
       args:
         AIRFLOW_BASE_IMAGE: *airflow_image
     image: airflow-docker
+    container_name: init
     depends_on:
       - postgres
     environment: *airflow_environment
@@ -40,7 +45,7 @@ services:
       args:
         AIRFLOW_BASE_IMAGE: *airflow_image
     image: airflow-docker
-
+    container_name: webserver
     restart: always
     depends_on:
       - postgres
@@ -57,7 +62,7 @@ services:
       args:
         AIRFLOW_BASE_IMAGE: *airflow_image
     image: airflow-docker
-
+    container_name: scheduler
     restart: always
     depends_on:
       - postgres
@@ -69,22 +74,42 @@ services:
     environment: *airflow_environment
     command: scheduler
 
-  ml_base:
+  unittests:
+    build:
+      context: images/airflow-docker
+    image: airflow-docker
+    container_name: unittests
+    restart: "no"
+    user: "airflow"
+    entrypoint: /bin/bash
+    working_dir: /src
+    volumes:
+      - ./dags:/src/dags
+      - ./tests:/src/tests
+    command: >
+      -c "python -m pip install --upgrade pip
+      && pip install --default-timeout=900 -r /src/tests/requirements.txt
+      && python -m unittest discover -s tests -p '*_test.py'"
+
+  ml-base:
     build:
       context: images/airflow-ml-base
     image: airflow-ml-base
+    container_name: ml-base
     restart: "no"
 
   generate:
     build:
       context: images/airflow-generate
     image: airflow-generate
+    container_name: generate
     restart: "no"
 
   preprocessing:
     build:
       context: images/airflow-preprocessing
     image: airflow-preprocessing
+    container_name: preprocessing
     restart: "no"
 
 
@@ -92,14 +117,40 @@ services:
     build:
       context: images/airflow-split
     image: airflow-split
+    container_name: split
+    restart: "no"
+
+  train:
+    build:
+      context: images/airflow-train
+    image: airflow-train
+    container_name: train
     restart: "no"
 
   test:
     build:
       context: images/airflow-test
     image: airflow-test
+    container_name: test
     restart: "no"
 
+  mlflow:
+    build:
+      context: images/airflow-mlflow
+    image: airflow-mlflow
+    container_name: mlflow
+    entrypoint: /bin/bash
+    depends_on:
+      - postgres
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow_data:/mlflow
+    command: >
+      -c "mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri postgresql://airflow:airflow@postgres:5432/db_mlflow --default-artifact-root /mlflow"
+    restart: always
 
 volumes:
   logs:
+  mlflow_data:
+      name: mlflow_data

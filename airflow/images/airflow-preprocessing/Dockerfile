@@ -1,6 +1,5 @@
-FROM python:3.8.15-slim-buster
+FROM airflow-ml-base:latest
 
-COPY preprocessing.py utils.py requirements.txt /
-RUN python3 -m pip install --upgrade pip && pip3 install -r requirements.txt
+COPY preprocessing.py /preprocessing.py
 
-ENTRYPOINT ["python3", "preprocessing.py"]
+ENTRYPOINT ["python", "preprocessing.py"]

@@ -9,8 +9,8 @@ from sklearn.linear_model import LogisticRegression
 
 
 @click.command('train')
-@click.argument("input_dir")
-@click.argument("models_dir")
+@click.option("--input-dir")
+@click.option("--models-dir")
 def main(input_dir: str, models_dir: str)->None:
     os.makedirs(models_dir, exist_ok=True)
     train_x = pd.read_csv(os.path.join(input_dir, "processed_train_data.csv"))

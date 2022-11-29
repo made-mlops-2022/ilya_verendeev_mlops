@@ -1,5 +1,15 @@
+
+```Bash-script``` для запуска родительского докера ```airflow-ml-base``` и ```docker-compose```:
 ```
-# для корректной работы с переменными, созданными из UI
-export FERNET_KEY=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")
-docker compose up --build
+bash start.sh
 ```
+To check data into container use:
+```
+docker exec -it scheduler bash
+```
+Test - start in separate container - ```unittests```. To see logs use command:
+```
+docker-compose logs unittests
+```
+
+https://github.com/mrts/docker-postgresql-multiple-databases/blob/master/create-multiple-postgresql-databases.sh

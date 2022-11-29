@@ -1,6 +1,5 @@
-FROM python:3.8.15-slim-buster
+FROM airflow-ml-base:latest
 
-COPY split.py requirements.txt /
-RUN python3 -m pip install --upgrade pip && pip3 install -r requirements.txt
+COPY split.py /split.py
 
-ENTRYPOINT ["python3", "split.py"]
+ENTRYPOINT ["python", "split.py"]

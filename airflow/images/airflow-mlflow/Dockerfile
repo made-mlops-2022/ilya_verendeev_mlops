@@ -1,0 +1,1 @@
+FROM airflow-ml-base:latest
