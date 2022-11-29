@@ -57,11 +57,12 @@ with DAG(
     )
     predict = DockerOperator(
         image='airflow-test',
-        command='--input-dir /data/predict/splitted/{{ ds }} --models-dir /data/models/{{ ds }} --output-dir /data/predict/results/{{ ds }}',
-        network_mode='bridge',
+        command='--input-dir /data/predict/splitted/{{ ds }} --models-dir /data/models/{{ ds }} --output-dir /data/predict/results/{{ ds }} --operation predict',
+        network_mode='host',
         task_id='validate',
         do_xcom_push=False,
         auto_remove=True,
-        mounts=[Mount(source="/home/ilya/MADE/mlops_hw_03/ilya_verendeev_mlops/airflow/data", target='/data', type='bind')]
+        mounts=[Mount(source="/home/ilya/MADE/mlops_hw_03/ilya_verendeev_mlops/airflow/data", target='/data', type='bind'),
+                Mount(source="/home/ilya/MADE/mlops_hw_03/ilya_verendeev_mlops/airflow/mlflow_data", target='/mlflow', type='bind')]
     )
     wait_loading_data >> preprocessing >> split >> predict
