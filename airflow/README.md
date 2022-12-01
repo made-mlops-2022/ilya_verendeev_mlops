@@ -1,4 +1,5 @@
 
+#### Docker Windows-Desktop + WSL2 <br />
 ```Bash-script``` для запуска родительского докера ```airflow-ml-base``` и ```docker-compose```:
 ```
 bash start.sh
@@ -15,4 +16,3 @@ MlFlow here:
 ```
 http://localhost:5000/
 ```
-https://github.com/mrts/docker-postgresql-multiple-databases/blob/master/create-multiple-postgresql-databases.sh

@@ -29,11 +29,9 @@ def main(input_dir: str, models_dir: str, output_dir: str, operation: str)->None
     test_x = pd.read_csv(os.path.join(input_dir, "processed_test_data.csv"))
     test_y = pd.read_csv(os.path.join(input_dir, "test_target.csv"))
 
-    last_model_params = sorted(
-        mlflow_client.search_model_versions("name='LogReg'"),
-        key=lambda x: x.last_updated_timestamp,
-    )[-1]
-    model = mlflow.sklearn.load_model(f"models:/{last_model_params.name}/{last_model_params.version}")
+    mv = mlflow_client.search_model_versions("name='LogReg'")
+    version = max([dict(v)['version'] for v in mv])
+    model = mlflow.sklearn.load_model(f"models:/LogReg/{version}")
 
     predicted_y = model.predict(test_x)
 
